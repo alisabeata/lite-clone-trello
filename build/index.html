@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>trello-clone</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <a href="/">clone-trello</a>
+    </header>
+    <button class="add-board-btn">Create a new board</button>
+    <br>
+    <br>
+    <div class="add-board hidden">
+      <form action="">
+        <p>board name:</p>
+        <input type="text" class="add-board__input">
+        <button class="add-board__close">Close</button>
+        <button class="add-board__save">Save</button>
+      </form>
+    </div>
+    <div class="boards"></div>
+    <div class="cards">
+      <div class="cards__inner"></div>
+    </div>
+  </div>
+  <script type="text/x-template" id="card-template">
+    <div class="card__inner">
+      <form action="" class="card__form">
+        <input type="text" class="card__inp-title" placeholder="add card title">
+        <p class="card__title hidden"></p>
+        <div class="card__list">
+        </div>
+      </form>
+    </div>
+  </script>
+  <script src="bundle.js"></script>
+</body>
+</html>
