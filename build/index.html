@@ -10,14 +10,11 @@
     <header>
       <a href="/">clone-trello</a>
     </header>
-    <button class="add-board-btn">Create a new board</button>
-    <br>
-    <br>
-    <div class="add-board hidden">
-      <form action="">
+    <div class="add-board">
+      <form action="" class="add-board__form">
         <p>board name:</p>
         <input type="text" class="add-board__input">
-        <button class="add-board__close">Close</button>
+        <a href="" class="add-board__close">close</a>
         <button class="add-board__save">Save</button>
       </form>
     </div>
@@ -31,8 +28,8 @@
       <form action="" class="card__form">
         <input type="text" class="card__inp-title" placeholder="add card title">
         <p class="card__title hidden"></p>
-        <div class="card__list">
-        </div>
+      </form>
+      <form action="" class="card__list">
       </form>
     </div>
   </script>

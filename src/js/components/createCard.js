@@ -3,20 +3,59 @@ export default function createCard() {
   const cardsContainer = document.querySelector('.cards__inner');
   const cardTemplate = document.querySelector('#card-template').innerHTML;
   
-  
-  function addTitle(input) {
-    const title = input.parentElement.querySelector('.card__title');
+  function addListItem(input, list) {
+    const item = document.createElement('p');
     const val = input.value;
     
     if (val.length > 0) {
-      title.textContent = val;
-      title.classList.remove('hidden');
+      item.textContent = input.value;
+      item.className = 'card__list-item';
 
-      input.classList.add('hidden');
+      list.appendChild(item);
+
+      input.value = '';
     }
   }
   
-  function addCard() {
+  function addListInput(list) {
+    const cardListInput = document.createElement('input');
+    
+    cardListInput.type = 'text';
+    cardListInput.value = '';
+    cardListInput.placeholder = 'add item name';
+    cardListInput.className = 'card__list-input';
+    
+    list.appendChild(cardListInput);
+    
+    createNewCard();
+    
+    const cardListInputs = document.querySelectorAll('.card__list-input');
+    
+    for (let i = 0; i < cardListInputs.length; i++) {
+      cardListInputs[i].addEventListener('blur', function () {
+        addListItem(this, list);
+      });
+    }
+  }
+  
+  function saveCardTitle(input) {
+    const val = input.value;
+    const elem = input.parentElement.querySelector('.card__title');
+    const list = input.parentElement.nextElementSibling;
+    
+    if (val.length > 0) {
+      elem.textContent = val;
+      elem.classList.remove('hidden');
+
+      input.classList.add('hidden');
+      
+      if (!list.querySelector('.card__list-input')) {
+        addListInput(list);
+      }
+    }
+  }
+  
+  function createNewCard() {
     const card = document.createElement('div');
     
     card.className = 'card';
@@ -28,36 +67,32 @@ export default function createCard() {
     
     for (let i = 0; i < inpTitle.length; i++) {
       inpTitle[i].addEventListener('blur', function () {
-        addTitle(this);
+        saveCardTitle(this);
       });
     }
   }
   
-  function createAddBtn() {
-    const btn = document.createElement('button');
-    
-    btn.textContent = 'Add card';
-    
-    container.appendChild(btn);
-    
-    btn.addEventListener('click', function () {
-      addCard();
-    });
+  function clearContainer() {
+    cardsContainer.innerHTML = '';
   }
+
   
   document.addEventListener('submit', event => {
-    if (event.target.className === 'card__form') {
-      event.preventDefault();
-      
-      const input = event.target.querySelector('.card__inp-title');
-      
-      addTitle(input);
+    switch (event.target.className) {
+      case 'card__form':
+        event.preventDefault();
+        saveCardTitle(event.target.querySelector('.card__inp-title'));
+        break;
+        
+      case 'card__list':
+        event.preventDefault();
+        addListItem(event.target.querySelector('.card__list-input'), event.target);
+        break;
     }
   });
   
   return {
-    addTitle,
-    createAddBtn,
-    create: addCard,
+    clearContainer,
+    create: createNewCard,
   };
 };
