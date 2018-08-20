@@ -2,7 +2,6 @@ import createCard from './createCard';
 import storageApp from './storage';
 
 const card = createCard();
-
 const storage = storageApp();
 
 storage.setItem('name', 'data11111');

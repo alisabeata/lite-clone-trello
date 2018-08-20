@@ -6,8 +6,8 @@ export default function storageApp() {
     
     try {
       localStorage.setItem(name, data);
-    } catch (e) {
-      if (e == QUOTA_EXCEEDED_ERR) {
+    } catch (event) {
+      if (event == QUOTA_EXCEEDED_ERR) {
         alert('Data storage limit exceeded');
       }
     }

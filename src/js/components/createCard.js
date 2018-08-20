@@ -1,3 +1,5 @@
+import dragndrop from './dragndrop';
+
 export default function createCard() {
   const container = document.querySelector('.cards');
   const cardsContainer = document.querySelector('.cards__inner');
@@ -12,6 +14,8 @@ export default function createCard() {
       item.className = 'card__list-item';
 
       list.appendChild(item);
+      
+      dragndrop(item, document.querySelectorAll('.card__list'));
 
       input.value = '';
     }
@@ -75,19 +79,18 @@ export default function createCard() {
   function clearContainer() {
     cardsContainer.innerHTML = '';
   }
-
   
   document.addEventListener('submit', event => {
-    switch (event.target.className) {
-      case 'card__form':
-        event.preventDefault();
-        saveCardTitle(event.target.querySelector('.card__inp-title'));
-        break;
-        
-      case 'card__list':
-        event.preventDefault();
+    const elemClass = event.target.classList;
+    
+    if (elemClass.contains('card__form')) {
+      event.preventDefault();
+      saveCardTitle(event.target.querySelector('.card__inp-title'));
+    }
+    
+    if (elemClass.contains('card__list')) {
+      event.preventDefault();
         addListItem(event.target.querySelector('.card__list-input'), event.target);
-        break;
     }
   });
   

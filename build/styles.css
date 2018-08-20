@@ -62,6 +62,7 @@ header a {
 
 .card__list {
   margin: 0 -5px;
+  height: 200px;
 }
 
 .card__list-input {
@@ -71,10 +72,12 @@ header a {
 
 .card__list-item {
   position: relative;
+  width: 210px;
   padding: 4px 5px;
   margin-bottom: -1px;
   border: 1px solid #fafa98;
   background: #fafa98;
+  box-sizing: border-box;
 }
 
 .card__list-item:hover {
