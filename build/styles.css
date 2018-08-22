@@ -23,6 +23,10 @@ header a {
   display: none !important;
 }
 
+.drop-hover {
+  outline: 1px dotted #ccc;
+}
+
 .cards > button {
   margin-bottom: 20px;
 }
@@ -37,8 +41,8 @@ header a {
   background: #fafa98;
   border: 1px solid #ccc;
   width: 200px;
-  padding: 20px;
-  margin: 0 10px 15px;
+  padding: 20px 20px 0;
+  margin: 0 10px;
 }
 
 .card input {
@@ -62,7 +66,7 @@ header a {
 
 .card__list {
   margin: 0 -5px;
-  height: 200px;
+  padding-bottom: 20px;
 }
 
 .card__list-input {

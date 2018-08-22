@@ -1,12 +1,6 @@
 export default function dragndrop(elem, containerElems) {
   let dragObject = {};
-  
-  elem.classList.add('draggable');
 
-  for (let i = 0; i < containerElems.length; i++) {
-    containerElems[i].classList.add('droppable');
-  }
-  
   elem.ondragstart = () => false;
   
   function getCoords(element) {
@@ -41,12 +35,15 @@ export default function dragndrop(elem, containerElems) {
     return avatar;
   }
   
-  function startDrag() {
-    var avatar = dragObject.avatar;
+  function clearItems() {
+    const items = document.querySelectorAll('.draggable');
+    
+    for (let i = 0; i < items.length; i++) {
+      const current = items[i];
 
-    document.body.appendChild(avatar);
-    avatar.style.zIndex = 9999;
-    avatar.style.position = 'absolute';
+      current.removeAttribute('hidden');
+      current.removeAttribute('style');
+    }
   }
   
   function findDroppable(event) {
@@ -58,43 +55,57 @@ export default function dragndrop(elem, containerElems) {
 
     if (element == null) return null;
 
-    return element.closest('.droppable');
+    return {
+      element,
+      parent: element.closest('.droppable'),
+    };
   }
   
-  function onDragEnd(dragObject, dropElem) {
+  function onDragEnd(dragObject, dropElems) {
     dragObject.element.hidden = true;
     
-    dropElem.classList.add('drop-finish');
-    
-    dropElem.appendChild(dragObject.element);
-    
-    const dropChildrens = dropElem.children;
-    
-    console.log(dropChildrens);
-    
-    for (let i = 0; i < dropChildrens.length; i++) {
-      const currentElem = dropChildrens[i];
+    if (dropElems.parent) {
+        dropElems.parent.classList.add('drop-finish');
+
+      if (dropElems.element.classList.contains('draggable')) {
+        dropElems.parent.insertBefore(dragObject.element, dropElems.element);
+      }
       
-      currentElem.removeAttribute('hidden');
-      currentElem.removeAttribute('style');
+      if (dropElems.element.classList.contains('droppable')) {
+        dropElems.parent.appendChild(dragObject.element);
+      }
+      
+      clearItems();
+
+      setTimeout(function () {
+        dropElems.parent.classList.remove('drop-finish');
+      }, 500);
+      
+    } else {
+      onDragCancel(dragObject);
+      clearItems();
     }
-    
-    setTimeout(function () {
-      dropElem.classList.remove('drop-finish');
-    }, 500);
   }
   
   function onDragCancel(dragObject) {
     dragObject.avatar.rollback();
   }
   
-  function finishDrag(event) {
-    var dropElem = findDroppable(event);
+  function startDrag() {
+    const avatar = dragObject.avatar;
 
-    if (!dropElem) {
+    document.body.appendChild(avatar);
+    avatar.style.zIndex = 9999;
+    avatar.style.position = 'absolute';
+  }
+  
+  function finishDrag(event) {
+    var dropElems = findDroppable(event);
+
+    if (!dropElems) {
       onDragCancel(dragObject);
     } else {
-      onDragEnd(dragObject, dropElem);
+      onDragEnd(dragObject, dropElems);
     }
   }
   

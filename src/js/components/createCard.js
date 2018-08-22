@@ -15,6 +15,7 @@ export default function createCard() {
 
       list.appendChild(item);
       
+      item.classList.add('draggable');
       dragndrop(item, document.querySelectorAll('.card__list'));
 
       input.value = '';
@@ -52,6 +53,8 @@ export default function createCard() {
       elem.classList.remove('hidden');
 
       input.classList.add('hidden');
+      
+      list.classList.add('droppable');
       
       if (!list.querySelector('.card__list-input')) {
         addListInput(list);
