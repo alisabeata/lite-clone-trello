@@ -1,4 +1,10 @@
+import storageApp from './storage';
+
+const storage = storageApp();
+
+
 export default function dragndrop(elem, containerElems) {
+  const cardItemRemover = document.querySelector('.card-item-remover');
   let dragObject = {};
 
   elem.ondragstart = () => false;
@@ -65,26 +71,27 @@ export default function dragndrop(elem, containerElems) {
     dragObject.element.hidden = true;
     
     if (dropElems.parent) {
-        dropElems.parent.classList.add('drop-finish');
-
-      if (dropElems.element.classList.contains('draggable')) {
+      if (dropElems.element.classList.contains('card__list-item')) {
         dropElems.parent.insertBefore(dragObject.element, dropElems.element);
       }
       
-      if (dropElems.element.classList.contains('droppable')) {
+      if (dropElems.element.classList.contains('card__list')) {
         dropElems.parent.appendChild(dragObject.element);
       }
       
+      if (dropElems.element.classList.contains('card-item-remover')) {
+        dragObject.avatar.remove();
+      }
+      
       clearItems();
-
-      setTimeout(function () {
-        dropElems.parent.classList.remove('drop-finish');
-      }, 500);
       
     } else {
       onDragCancel(dragObject);
       clearItems();
     }
+    
+    cardItemRemover.hidden = true;
+    cardItemRemover.classList.remove('card-item-remover__hover');
   }
   
   function onDragCancel(dragObject) {
@@ -97,6 +104,8 @@ export default function dragndrop(elem, containerElems) {
     document.body.appendChild(avatar);
     avatar.style.zIndex = 9999;
     avatar.style.position = 'absolute';
+    
+    cardItemRemover.hidden = false;
   }
   
   function finishDrag(event) {
@@ -162,5 +171,10 @@ export default function dragndrop(elem, containerElems) {
   document.onmousemove = onMouseMove;
   document.onmouseup = onMouseUp;
   document.onmousedown = onMouseDown;
+  
+  
+  cardItemRemover.addEventListener('mouseover', function () {
+    this.classList.add('card-item-remover__hover');
+  });
   
 };

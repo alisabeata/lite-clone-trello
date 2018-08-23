@@ -27,6 +27,35 @@ header a {
   outline: 1px dotted #ccc;
 }
 
+.close-icon {
+  position: absolute;
+  top: -6px;
+  right: -7px;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  color: #9e9e9e;
+  line-height: 17px;
+  font-size: 11px;
+  box-sizing: border-box;
+  font-family: sans-serif;
+  background: white;
+  border: 1px solid #9e9e9e;
+  border-radius: 12px;
+  display: none;
+  cursor: pointer;
+}
+
+.close-icon:hover {
+  color: #636363;
+  border: 1px solid #636363;
+}
+
+.board:hover .close-icon,
+.card_with-title:hover .close-icon {
+  display: block;
+}
+
 .cards > button {
   margin-bottom: 20px;
 }
@@ -36,13 +65,14 @@ header a {
 }
 
 .card {
+  position: relative;
   display: inline-block;
   vertical-align: top;
   background: #fafa98;
   border: 1px solid #ccc;
   width: 200px;
   padding: 20px 20px 0;
-  margin: 0 10px;
+  margin: 0 10px 15px;
 }
 
 .card input {
@@ -91,6 +121,39 @@ header a {
   cursor: grab;
 }
 
+.card__close {
+  background: #ffffe4;
+  color: #b7b7b7;
+  border: 1px solid #cecece;
+}
+
+.card__close:hover {
+  background: white;
+  color: #a2a2a2;
+  border: 1px solid #cecece;
+}
+
+.card-item-remover {
+  position: fixed;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 85px;
+  height: 85px;
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDAgNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTI4IDQwSDExLjhjLTMuMyAwLTUuOS0yLjctNS45LTUuOVYxNmMwLS42LjQtMSAxLTFzMSAuNCAxIDF2MTguMWMwIDIuMiAxLjggMy45IDMuOSAzLjlIMjhjMi4yIDAgMy45LTEuOCAzLjktMy45VjE2YzAtLjYuNC0xIDEtMXMxIC40IDEgMXYxOC4xYzAgMy4yLTIuNyA1LjktNS45IDUuOXpNMzMuMyA0LjloLTcuNkMyNS4yIDIuMSAyMi44IDAgMTkuOSAwcy01LjMgMi4xLTUuOCA0LjlINi41QzQuMiA0LjkgMi40IDYuNyAyLjQgOXMxLjggNCA0LjEgNGgyNi45YzIuMyAwIDQuMS0xLjggNC4xLTQuMXMtMS45LTQtNC4yLTR6TTE5LjkgMmMxLjggMCAzLjMgMS4yIDMuNyAyLjloLTcuNWMuNS0xLjcgMi0yLjkgMy44LTIuOXptMTMuNCA5SDYuNWMtMS4xIDAtMi4xLS45LTIuMS0yLjEgMC0xLjEuOS0yLjEgMi4xLTIuMWgyNi45YzEuMSAwIDIuMS45IDIuMSAyLjEtLjEgMS4yLTEgMi4xLTIuMiAyLjF6Ii8+PHBhdGggZD0iTTEyLjkgMzUuMWMtLjYgMC0xLS40LTEtMVYxNy40YzAtLjYuNC0xIDEtMXMxIC40IDEgMXYxNi43YzAgLjUtLjUgMS0xIDF6TTI2LjkgMzUuMWMtLjYgMC0xLS40LTEtMVYxNy40YzAtLjYuNC0xIDEtMXMxIC40IDEgMXYxNi43YzAgLjUtLjUgMS0xIDF6TTE5LjkgMzUuMWMtLjYgMC0xLS40LTEtMVYxNy40YzAtLjYuNC0xIDEtMXMxIC40IDEgMXYxNi43YzAgLjUtLjUgMS0xIDF6Ii8+PC9zdmc+');
+  background-size: 50px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #e5e5e5;
+  opacity: .3;
+  
+}
+
+.card-item-remover__hover {
+  outline: 1px dotted #424242;
+}
+
 .add-board {
   background: #9bd0fd;
   border: 1px solid #75a6d1;
@@ -127,6 +190,7 @@ header a {
 }
 
 .board {
+  position: relative;
   display: inline-block;
   background: #ffffff;
   color: #79828b;

@@ -1,5 +1,6 @@
 import dragndrop from './dragndrop';
 
+
 export default function createCard() {
   const container = document.querySelector('.cards');
   const cardsContainer = document.querySelector('.cards__inner');
@@ -45,8 +46,11 @@ export default function createCard() {
   
   function saveCardTitle(input) {
     const val = input.value;
-    const elem = input.parentElement.querySelector('.card__title');
-    const list = input.parentElement.nextElementSibling;
+    const currentCard = input.closest('.card');
+    const elem = currentCard.querySelector('.card__title');
+    const list = currentCard.querySelector('.card__list');
+    
+    console.log(currentCard);
     
     if (val.length > 0) {
       elem.textContent = val;
@@ -57,6 +61,7 @@ export default function createCard() {
       list.classList.add('droppable');
       
       if (!list.querySelector('.card__list-input')) {
+        currentCard.classList.add('card_with-title');
         addListInput(list);
       }
     }
@@ -70,18 +75,26 @@ export default function createCard() {
     
     cardsContainer.appendChild(card);
     
-    const inpTitle = document.querySelectorAll('.card__inp-title');
+    const inpTitle = card.querySelector('.card__inp-title');
     
-    for (let i = 0; i < inpTitle.length; i++) {
-      inpTitle[i].addEventListener('blur', function () {
-        saveCardTitle(this);
-      });
-    }
+    inpTitle.addEventListener('blur', function () {
+      saveCardTitle(this);
+    });
   }
   
   function clearContainer() {
     cardsContainer.innerHTML = '';
   }
+  
+  document.addEventListener('click', event => {
+    if (event.target.classList.contains('card__close')) {
+      event.target.closest('.card').remove();
+      
+      if (!document.querySelectorAll('.card').length) {
+        createNewCard();
+      }
+    }
+  });
   
   document.addEventListener('submit', event => {
     const elemClass = event.target.classList;
@@ -95,6 +108,10 @@ export default function createCard() {
       event.preventDefault();
         addListItem(event.target.querySelector('.card__list-input'), event.target);
     }
+  });
+  
+  document.addEventListener('blur', () => {
+    console.log('bluuuuuur');
   });
   
   return {

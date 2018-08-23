@@ -22,9 +22,11 @@
     <div class="cards">
       <div class="cards__inner"></div>
     </div>
+    <div class="card-item-remover droppable" hidden></div>
   </div>
   <script type="text/x-template" id="card-template">
     <div class="card__inner">
+      <span class="close-icon card__close">x</span>
       <form action="" class="card__form">
         <input type="text" class="card__inp-title" placeholder="add card title">
         <p class="card__title hidden"></p>

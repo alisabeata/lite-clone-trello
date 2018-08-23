@@ -6,9 +6,6 @@ const storage = storageApp();
 
 storage.setItem('name', 'data11111');
 
-// хранить в сторадж данные по айдишнику, и айдишнику карточки (двойная вложенность)
-// реализовать чтение данных при кликие на кнопку доски
-// изменение данных при переносе пунктов из списка в список
 
 export default function createBoard() {
   const container = document.querySelector('.boards');
@@ -16,7 +13,6 @@ export default function createBoard() {
   const form = document.querySelector('.add-board form');
   const input = document.querySelector('.add-board__input');
   const saveBtn = document.querySelector('.add-board__save');
-  const closeBtn = document.querySelector('.add-board__close');
   
   function addBoard() {
     const val = input.value;
@@ -26,7 +22,7 @@ export default function createBoard() {
 
       board.className = 'board board_empty';
       board.setAttribute('href', '');
-      board.textContent = val;
+      board.innerHTML = `<span class="close-icon board__close">x</span>${val}`;
 
       container.appendChild(board);
 
@@ -36,19 +32,21 @@ export default function createBoard() {
         const thisBoard = this;
         const boards = document.querySelectorAll('.board');
         
-        event.preventDefault();
+        if (!event.target.classList.contains('board__close')) {
+          event.preventDefault();
         
-        if (!thisBoard.classList.contains('board_open')) {
-          for (let i = 0; i < boards.length; i++) {
-            boards[i].classList.remove('board_open');
+          if (!thisBoard.classList.contains('board_open')) {
+            for (let i = 0; i < boards.length; i++) {
+              boards[i].classList.remove('board_open');
+            }
+
+            thisBoard.classList.add('board_open');
+
+            card.clearContainer();
+            card.create();
+
+            thisBoard.classList.remove('board_empty');
           }
-          
-          thisBoard.classList.add('board_open');
-          
-          card.clearContainer();
-          card.create();
-          
-          thisBoard.classList.remove('board_empty');
         }
       });
     }
@@ -58,10 +56,18 @@ export default function createBoard() {
     addBoard();
   });
   
-  closeBtn.addEventListener('click', event => {
-    event.preventDefault();
-    input.value = '';
-    boardContainer.classList.add('hidden');
+  document.addEventListener('click', event => {
+    if (event.target.classList.contains('board__close')) {
+      const parentBoard = event.target.closest('.board');
+      
+      event.preventDefault();
+      
+      if (parentBoard.classList.contains('board_open')) {
+        card.clearContainer();
+      }
+      
+      parentBoard.remove();
+    }
   });
   
   form.addEventListener('submit', event => {
