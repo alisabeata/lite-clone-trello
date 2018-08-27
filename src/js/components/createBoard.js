@@ -1,22 +1,18 @@
 import createCard from './createCard';
-import storageApp from './storage';
+
 
 const card = createCard();
-const storage = storageApp();
 
-storage.setItem('name', 'data11111');
-
-
-export default function createBoard() {
+export default function createBoard(data) {
   const container = document.querySelector('.boards');
   const boardContainer = document.querySelector('.add-board');
   const form = document.querySelector('.add-board form');
   const input = document.querySelector('.add-board__input');
   const saveBtn = document.querySelector('.add-board__save');
   
-  function addBoard() {
-    const val = input.value;
-    
+  console.log('createBoard');
+  
+  function addBoard(val) {
     if (val.length > 0) {
       const board = document.createElement('a');
 
@@ -41,8 +37,19 @@ export default function createBoard() {
             }
 
             thisBoard.classList.add('board_open');
-
+            
+            console.log(data);
+            
             card.clearContainer();
+            
+            if (data) {
+              const dataBoard = data[0][val];
+    
+              for (let cardContent in dataBoard) {
+                card.create([cardContent, dataBoard[cardContent]]);
+              }
+            }
+            
             card.create();
 
             thisBoard.classList.remove('board_empty');
@@ -53,7 +60,7 @@ export default function createBoard() {
   }
   
   saveBtn.addEventListener('click', () => {
-    addBoard();
+    addBoard(input.value);
   });
   
   document.addEventListener('click', event => {
@@ -67,11 +74,22 @@ export default function createBoard() {
       }
       
       parentBoard.remove();
+      
+      // TODO
+      // добавлять обработку данных (добавление контента) из сторадж при закрытии для активной доски
     }
   });
   
   form.addEventListener('submit', event => {
     event.preventDefault();
-    addBoard();
+    addBoard(input.value);
   });
+  
+  if (data) {
+    const dataObj = data[0];
+    
+    for (let boardTitle in dataObj) {
+      addBoard(boardTitle);
+    }
+  }
 };

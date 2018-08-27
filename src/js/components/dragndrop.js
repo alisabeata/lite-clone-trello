@@ -1,7 +1,7 @@
 import storageApp from './storage';
 
-const storage = storageApp();
 
+const storage = storageApp();
 
 export default function dragndrop(elem, containerElems) {
   const cardItemRemover = document.querySelector('.card-item-remover');
