@@ -24,10 +24,7 @@ export default function createCard() {
       list.appendChild(item);
       
       if (itemContent && !dataValue) {
-        debugger;
-        console.log(data[boardTitle][cardTitle]);
         data[boardTitle][cardTitle].push(itemContent);
-      
         storage.setData(data);
       }
       

@@ -7,8 +7,6 @@ import storageApp from './components/storage';
 const storage = storageApp();
 const data = storage.getData() || undefined;
 
-console.log(data)
-
 loadPage(detectDevice().isMobile);
 createBoard(data);
 

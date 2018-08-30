@@ -6,6 +6,7 @@ const storage = storageApp();
 export default function dragndrop(elem, containerElems) {
   const cardItemRemover = document.querySelector('.card-item-remover');
   let dragObject = {};
+  let draggableCard;
 
   elem.ondragstart = () => false;
   
@@ -68,19 +69,50 @@ export default function dragndrop(elem, containerElems) {
   }
   
   function onDragEnd(dragObject, dropElems) {
-    dragObject.element.hidden = true;
+    const dragElem = dragObject.element;
+    const dropElem = dropElems.element;
+    const elemClass = dropElem.classList;
+    const parentElem = dropElems.parent;
+    const boardTitle = document.querySelector('.board_open .board__name').textContent;
     
-    if (dropElems.parent) {
-      if (dropElems.element.classList.contains('card__list-item')) {
-        dropElems.parent.insertBefore(dragObject.element, dropElems.element);
+    dragElem.hidden = true;
+    
+    function changeSorting(card) {
+      const listItems = card.querySelectorAll('.card__list-item');
+      const cardTitle = card.querySelector('.card__title').textContent;
+      let data = storage.getData();
+
+      data[boardTitle][cardTitle] = [];
+
+      for (let i = 0; i < listItems.length; i++) {
+        data[boardTitle][cardTitle].push(listItems[i].textContent);
       }
       
-      if (dropElems.element.classList.contains('card__list')) {
-        dropElems.parent.appendChild(dragObject.element);
-      }
+      storage.setData(data);
+    }
+    
+    if (parentElem) {
+      changeSorting(draggableCard);
+      draggableCard = null;
       
-      if (dropElems.element.classList.contains('card-item-remover')) {
-        dragObject.avatar.remove();
+      switch (true) {
+        case elemClass.contains('card__list-item'):
+          parentElem.insertBefore(dragElem, dropElem);
+          changeSorting(parentElem.closest('.card'));
+          break;
+          
+        case elemClass.contains('card__list'):
+          parentElem.appendChild(dragElem);
+          changeSorting(parentElem.closest('.card'));
+          break;
+          
+        case elemClass.contains('card-item-remover'):
+          dragObject.avatar.remove();
+          break;
+          
+        default:
+          onDragCancel(dragObject);
+          break;
       }
       
       clearItems();
@@ -100,6 +132,9 @@ export default function dragndrop(elem, containerElems) {
   
   function startDrag() {
     const avatar = dragObject.avatar;
+    
+    draggableCard = dragObject.element.closest('.card');
+    console.log(draggableCard);
 
     document.body.appendChild(avatar);
     avatar.style.zIndex = 9999;
