@@ -1,20 +1,37 @@
 import dragndrop from './dragndrop';
+import storageApp from './storage';
 
+
+const storage = storageApp();
 
 export default function createCard() {
   const container = document.querySelector('.cards');
   const cardsContainer = document.querySelector('.cards__inner');
   const cardTemplate = document.querySelector('#card-template').innerHTML;
+  let boardTitle;
   
-  function addListItem(input, list, dataValue) {
+  function addListItem(cardTitle, input, list, dataValue) {
     const item = document.createElement('p');
     const val = input ? input.value : null;
+    let data = storage.getData();
     
     if (dataValue || val.length > 0) {
-      item.textContent = dataValue || input.value;
+      const itemContent = dataValue || input.value;
+      
+      item.textContent = itemContent;
       item.className = 'card__list-item';
 
       list.appendChild(item);
+      
+      if (itemContent && !dataValue) {
+        debugger;
+        console.log(data[boardTitle][cardTitle]);
+        data[boardTitle][cardTitle].push(itemContent);
+      
+        storage.setData(data);
+      }
+      
+      console.log(data);
       
       item.classList.add('draggable');
       dragndrop(item, document.querySelectorAll('.card__list'));
@@ -23,7 +40,7 @@ export default function createCard() {
     }
   }
   
-  function addListInput(list, data) {
+  function addListInput(list, listContent, cardTitle) {
     const cardListInput = document.createElement('input');
     
     cardListInput.type = 'text';
@@ -33,26 +50,37 @@ export default function createCard() {
     
     list.appendChild(cardListInput);
     
-    if (data) {
-      for (let i = 0; i < data.length; i++) {
-        addListItem(null, list, data[i]);
+    if (listContent) {
+      for (let i = 0; i < listContent.length; i++) {
+        addListItem(cardTitle, null, list, listContent[i]);
       }
     } else {
       const cardListInputs = document.querySelectorAll('.card__list-input');
     
       for (let i = 0; i < cardListInputs.length; i++) {
         cardListInputs[i].addEventListener('blur', function () {
-          addListItem(this, list);
+          addListItem(cardTitle, this, list);
         });
       }
       createNewCard();
     }
   }
   
-  function saveCardTitle(input, val, data) {
+  function saveCardTitle(input, val, listContent) {
     const currentCard = input.closest('.card');
     const elem = currentCard.querySelector('.card__title');
     const list = currentCard.querySelector('.card__list');
+    let data = storage.getData();
+    
+    boardTitle = document.querySelector('.board_open .board__name').textContent;
+    
+    const dataBoard = data[boardTitle][val];
+    
+    if (!dataBoard) {
+      data[boardTitle][val] = [];
+    }
+    
+    storage.setData(data);
     
     if (val.length > 0) {
       elem.textContent = val;
@@ -64,12 +92,12 @@ export default function createCard() {
       
       if (!list.querySelector('.card__list-input')) {
         currentCard.classList.add('card_with-title');
-        addListInput(list, data);
+        addListInput(list, listContent, val);
       }
     }
   }
   
-  function createNewCard(cardData) {
+  function createNewCard(cardTitle, listContent = []) {
     const card = document.createElement('div');
     
     card.className = 'card';
@@ -79,13 +107,13 @@ export default function createCard() {
     
     const inpTitle = card.querySelector('.card__inp-title');
     
-    if (cardData) {
-      saveCardTitle(inpTitle, cardData[0], cardData[1]);
-    } else {
-      inpTitle.addEventListener('blur', function () {
-        saveCardTitle(this, this.value);
-      });
+    if (cardTitle) {
+      saveCardTitle(inpTitle, cardTitle, listContent);
     }
+    
+    inpTitle.addEventListener('blur', function () {
+      saveCardTitle(this, this.value, listContent);
+    });
   }
   
   function clearContainer() {
@@ -114,8 +142,11 @@ export default function createCard() {
     }
     
     if (elemClass.contains('card__list')) {
+      const cardTitle = event.target.previousElementSibling.querySelector('.card__title').textContent;
+      
       event.preventDefault();
-        addListItem(event.target.querySelector('.card__list-input'), event.target);
+      
+      addListItem(cardTitle, event.target.querySelector('.card__list-input'), event.target);
     }
   });
   
