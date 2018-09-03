@@ -70,8 +70,13 @@ export default function createBoard(data = {}) {
   document.addEventListener('click', event => {
     if (event.target.classList.contains('board__close')) {
       const parentBoard = event.target.closest('.board');
+      const titleBoard = parentBoard.querySelector('.board__name').textContent;
+      let data = storage.getData();
       
       event.preventDefault();
+      
+      delete data[titleBoard];
+      storage.setData(data);
       
       if (parentBoard.classList.contains('board_open')) {
         card.clearContainer();

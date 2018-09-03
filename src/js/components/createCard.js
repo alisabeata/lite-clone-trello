@@ -28,8 +28,6 @@ export default function createCard() {
         storage.setData(data);
       }
       
-      console.log(data);
-      
       item.classList.add('draggable');
       dragndrop(item, document.querySelectorAll('.card__list'));
 
@@ -119,6 +117,15 @@ export default function createCard() {
   
   document.addEventListener('click', event => {
     if (event.target.classList.contains('card__close')) {
+      const titleBoard = document.querySelector('.board_open .board__name').textContent;
+      const titleCard = event.target.closest('.card').querySelector('.card__title').textContent;
+      let data = storage.getData();
+      
+      event.preventDefault();
+      
+      delete data[titleBoard][titleCard];
+      storage.setData(data);
+      
       event.target.closest('.card').remove();
       
       if (!document.querySelectorAll('.card').length) {
