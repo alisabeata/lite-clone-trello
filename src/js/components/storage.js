@@ -22,7 +22,7 @@ export default function storageApp() {
       data = localStorage.getItem('data');
     }
     
-    return data;
+    return data || {};
   }
   
   function remove(name) {

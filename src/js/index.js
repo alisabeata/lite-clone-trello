@@ -5,11 +5,10 @@ import storageApp from './components/storage';
 
 
 const storage = storageApp();
-const data = storage.getData() || undefined;
+const data = storage.getData();
 
 loadPage(detectDevice().isMobile);
 createBoard(data);
-
 
 //storage.setData(`
 //  {

@@ -23,7 +23,7 @@ export default function createBoard(data = {}) {
 
       container.appendChild(board);
       
-      if (!data[val]) {
+      if (!data || !data[val]) {
         data[val] = {};
       }
       
@@ -91,7 +91,7 @@ export default function createBoard(data = {}) {
     addBoard(input.value);
   });
   
-  if (Object.keys(data).length > 0) {
+  if (data && Object.keys(data).length > 0) {
     for (let boardTitle in data) {
       addBoard(boardTitle);
     }
